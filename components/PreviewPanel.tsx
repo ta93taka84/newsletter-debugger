@@ -21,7 +21,7 @@ export function PreviewPanel({ htmlContent }: PreviewPanelProps) {
     return (
         <Card className="flex flex-col h-full">
             <CardHeader className="flex flex-row items-center justify-between py-4">
-                <CardTitle className="text-lg">Preview</CardTitle>
+                <CardTitle className="text-lg">プレビュー</CardTitle>
                 <div className="flex items-center gap-2">
                     <div className="flex items-center border rounded-md bg-muted/50 p-1">
                         <Button
@@ -38,7 +38,7 @@ export function PreviewPanel({ htmlContent }: PreviewPanelProps) {
                             onClick={() => setMode("sp")}
                             className="h-7 px-2"
                         >
-                            <Smartphone className="h-4 w-4 mr-1" /> SP
+                            <Smartphone className="h-4 w-4 mr-1" /> スマホ
                         </Button>
                     </div>
 
@@ -47,7 +47,7 @@ export function PreviewPanel({ htmlContent }: PreviewPanelProps) {
                         size="icon"
                         className="h-8 w-8 ml-2"
                         onClick={() => setDarkMode(!darkMode)}
-                        title="Toggle Dark Mode Simulation"
+                        title="ダークモードシミュレーション切替"
                     >
                         {darkMode ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
                     </Button>

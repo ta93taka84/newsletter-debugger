@@ -15,7 +15,7 @@ export async function analyzeHtml(html: string): Promise<AnalysisResult> {
         errors.push({
             id: 'size-limit',
             severity: 'critical',
-            message: `HTML size (${(sizeInBytes / 1024).toFixed(2)}KB) exceeds Gmail's 102KB limit. content may be clipped.`,
+            message: `HTMLサイズ (${(sizeInBytes / 1024).toFixed(2)}KB) がGmailの102KB制限を超えています。コンテンツが途切れる可能性があります。`,
         });
     }
 
@@ -36,14 +36,14 @@ export async function analyzeHtml(html: string): Promise<AnalysisResult> {
             errors.push({
                 id: `img-no-alt-${i}`,
                 severity: 'critical',
-                message: 'Image tag is missing "alt" attribute.',
+                message: 'imgタグに "alt" 属性がありません。',
                 tag: `<img src="${src.substring(0, 30)}..." ...>`,
             });
         } else if (alt.trim() === '') {
             errors.push({
                 id: `img-empty-alt-${i}`,
                 severity: 'warning',
-                message: 'Image "alt" attribute is empty. Ensure this is intentional (e.g., decorative image).',
+                message: 'imgタグの "alt" 属性が空です。装飾用画像でない場合は説明を入力してください。',
                 tag: `<img src="${src.substring(0, 30)}..." alt="">`,
             });
         }
@@ -53,14 +53,14 @@ export async function analyzeHtml(html: string): Promise<AnalysisResult> {
     const links: { href: string; text: string; status?: number }[] = [];
     $('a').each((i, el) => {
         const href = $(el).attr('href') || '';
-        const text = $(el).text().trim() || '[Image/No Text]';
+        const text = $(el).text().trim() || '[画像/テキストなし]';
         links.push({ href, text });
 
         if (!href) {
             errors.push({
                 id: `link-no-href-${i}`,
                 severity: 'critical',
-                message: 'Anchor tag is missing "href" attribute or is empty.',
+                message: 'aタグに "href" 属性がないか、空です。',
                 tag: `<a>${text.substring(0, 20)}...</a>`
             });
         }
@@ -86,7 +86,7 @@ export async function analyzeHtml(html: string): Promise<AnalysisResult> {
             errors.push({
                 id: 'forbidden-chars',
                 severity: 'critical',
-                message: `Detected potentially incompatible characters (Machine-dependent characters): ${matches[0]}...`,
+                message: `機種依存文字が含まれている可能性があります: ${matches[0]}... 文字化けの原因となります。`,
                 snippet: matches[0]
             });
         }

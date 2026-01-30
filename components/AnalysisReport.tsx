@@ -19,7 +19,7 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
             <Card className="h-full flex items-center justify-center p-12">
                 <div className="flex flex-col items-center gap-4 text-muted-foreground">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    Analyzing...
+                    解析中...
                 </div>
             </Card>
         )
@@ -30,7 +30,7 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
             <Card className="h-full flex items-center justify-center p-12 bg-muted/20 border-dashed">
                 <div className="text-muted-foreground text-center">
                     <Info className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                    <p>Paste HTML code to generate a report.</p>
+                    <p>HTMLソースコードを貼り付けて解析してください。</p>
                 </div>
             </Card>
         )
@@ -51,8 +51,8 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
             {/* Score Card */}
             <Card>
                 <CardHeader className="pb-2">
-                    <CardTitle>Health Score</CardTitle>
-                    <CardDescription>Overall quality of your HTML email</CardDescription>
+                    <CardTitle>健全性スコア</CardTitle>
+                    <CardDescription>HTMLメールの全体的な品質評価</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex items-center justify-between">
@@ -62,10 +62,10 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
                         </div>
                         <div className="flex gap-2 text-sm">
                             <Badge variant="destructive" className="flex gap-1">
-                                <XCircle className="h-3 w-3" /> {criticalErrors.length} Critical
+                                <XCircle className="h-3 w-3" /> {criticalErrors.length} 要修正
                             </Badge>
                             <Badge variant="secondary" className="flex gap-1 bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-100">
-                                <AlertTriangle className="h-3 w-3" /> {warningErrors.length} Warning
+                                <AlertTriangle className="h-3 w-3" /> {warningErrors.length} 警告
                             </Badge>
                         </div>
                     </div>
@@ -77,11 +77,11 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
                 <Tabs defaultValue="all" className="w-full">
                     <div className="p-4 pb-0">
                         <TabsList className="w-full justify-start overflow-x-auto">
-                            <TabsTrigger value="all">All Issues ({result.errors.length})</TabsTrigger>
-                            <TabsTrigger value="critical">Critical ({criticalErrors.length})</TabsTrigger>
-                            <TabsTrigger value="warning">Warnings ({warningErrors.length})</TabsTrigger>
-                            <TabsTrigger value="links">Links ({result.links.length})</TabsTrigger>
-                            <TabsTrigger value="images">Images ({result.images.length})</TabsTrigger>
+                            <TabsTrigger value="all">全項目 ({result.errors.length})</TabsTrigger>
+                            <TabsTrigger value="critical">要修正 ({criticalErrors.length})</TabsTrigger>
+                            <TabsTrigger value="warning">警告 ({warningErrors.length})</TabsTrigger>
+                            <TabsTrigger value="links">リンク ({result.links.length})</TabsTrigger>
+                            <TabsTrigger value="images">画像 ({result.images.length})</TabsTrigger>
                         </TabsList>
                     </div>
 
@@ -103,7 +103,7 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
                         </TabsContent>
 
                         <TabsContent value="links" className="space-y-2 mt-0">
-                            {result.links.length === 0 ? <div className="text-muted-foreground text-sm">No links found.</div> : (
+                            {result.links.length === 0 ? <div className="text-muted-foreground text-sm">リンクは見つかりませんでした。</div> : (
                                 <div className="grid gap-2">
                                     {result.links.map((l, i) => (
                                         <div key={i} className="flex flex-col text-sm border p-2 rounded bg-muted/50">
@@ -116,7 +116,7 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
                         </TabsContent>
 
                         <TabsContent value="images" className="space-y-2 mt-0">
-                            {result.images.length === 0 ? <div className="text-muted-foreground text-sm">No images found.</div> : (
+                            {result.images.length === 0 ? <div className="text-muted-foreground text-sm">画像は見つかりませんでした。</div> : (
                                 <div className="grid gap-2">
                                     {result.images.map((img, i) => (
                                         <div key={i} className="flex gap-2 text-sm border p-2 rounded bg-muted/50 items-center">
@@ -126,7 +126,7 @@ export function AnalysisReport({ result, isAnalyzing }: AnalysisReportProps) {
                                             </div>
                                             <div className="min-w-0 flex-1">
                                                 <div className="truncate font-mono text-xs text-muted-foreground">src: {img.src}</div>
-                                                <div className="truncate">alt: <span className={!img.alt ? "text-red-500 font-bold" : "text-green-600"}>{img.alt || "MISSING"}</span></div>
+                                                <div className="truncate">alt: <span className={!img.alt ? "text-red-500 font-bold" : "text-green-600"}>{img.alt || "未設定"}</span></div>
                                             </div>
                                         </div>
                                     ))}
@@ -161,7 +161,7 @@ function SuccessMessage() {
     return (
         <div className="flex flex-col items-center justify-center py-8 text-green-600 text-sm">
             <CheckCircle className="h-8 w-8 mb-2" />
-            <p>No issues found in this category!</p>
+            <p>このカテゴリに問題は見つかりませんでした！</p>
         </div>
     )
 }
