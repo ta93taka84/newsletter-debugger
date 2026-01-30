@@ -65,7 +65,7 @@ export default function Home() {
             <Play className="h-6 w-6 text-primary" />
           </div>
           <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
-            Newsletter QA Tool
+            メルマガQAツール
           </h1>
         </div>
       </header>
@@ -76,9 +76,9 @@ export default function Home() {
           <Card className="flex-1 flex flex-col shadow-md">
             <CardHeader className="py-4 border-b bg-muted/20">
               <CardTitle className="text-sm font-medium flex justify-between items-center">
-                <span>Source Code</span>
+                <span>ソースコード</span>
                 <div className="text-xs text-muted-foreground font-normal">
-                  {htmlInput.length} chars
+                  {htmlInput.length} 文字
                 </div>
               </CardTitle>
             </CardHeader>
@@ -87,7 +87,7 @@ export default function Home() {
                 className="w-full h-full min-h-[400px] border-0 rounded-none resize-none font-mono text-sm p-4 focus-visible:ring-0"
                 value={htmlInput}
                 onChange={(e) => setHtmlInput(e.target.value)}
-                placeholder="Paste your HTML here..."
+                placeholder="ここにHTMLを貼り付けてください..."
               />
               <div className="absolute bottom-4 right-4 animate-in fade-in zoom-in duration-300">
                 <Button
@@ -96,7 +96,7 @@ export default function Home() {
                   disabled={isAnalyzing}
                   className="shadow-lg hover:shadow-xl transition-all"
                 >
-                  {isAnalyzing ? "Analyzing..." : "Analyze HTML"}
+                  {isAnalyzing ? "解析中..." : "HTMLを解析する"}
                 </Button>
               </div>
             </CardContent>
@@ -108,8 +108,8 @@ export default function Home() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <TabsList>
-                <TabsTrigger value="report">Analysis Report</TabsTrigger>
-                <TabsTrigger value="preview">Preview Simulation</TabsTrigger>
+                <TabsTrigger value="report">解析レポート</TabsTrigger>
+                <TabsTrigger value="preview">表示シミュレーション</TabsTrigger>
               </TabsList>
             </div>
 
