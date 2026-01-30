@@ -1,65 +1,129 @@
-import Image from "next/image";
+"use client"
+
+import * as React from "react"
+import { Play } from "lucide-react"
+import { analyzeHtmlAction } from "@/app/actions"
+import { AnalysisResult } from "@/types"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AnalysisReport } from "@/components/AnalysisReport"
+import { PreviewPanel } from "@/components/PreviewPanel"
+
+const INITIAL_HTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Newsletter</title>
+</head>
+<body style="margin: 0; padding: 0;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center">
+        <h1>Welcome to our Newsletter!</h1>
+        <p>This is a sample text.</p>
+        <img src="https://via.placeholder.com/300" />
+        <br/>
+        <a href="#">Click here</a> to unsubscribe.
+        <br/>
+        <p>機種依存文字 check: ① ㈱</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
 export default function Home() {
+  const [htmlInput, setHtmlInput] = React.useState(INITIAL_HTML)
+  const [result, setResult] = React.useState<AnalysisResult | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = React.useState(false)
+  const [activeTab, setActiveTab] = React.useState("report")
+
+  const handleAnalyze = async () => {
+    setIsAnalyzing(true)
+    try {
+      const res = await analyzeHtmlAction(htmlInput)
+      setResult(res)
+      setActiveTab("report") // Switch to report on analysis
+    } catch (error) {
+      console.error("Analysis failed", error)
+      // Ideally show toast error
+    } finally {
+      setIsAnalyzing(false)
+    }
+  }
+
+  // Auto-analyze on load for demo purposes? Or wait for user?
+  // Let's wait for user, but we can do a quick check if needed.
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-background flex flex-col">
+      <header className="border-b bg-card">
+        <div className="container mx-auto px-4 h-16 flex items-center gap-2">
+          <div className="bg-primary/10 p-2 rounded-md">
+            <Play className="h-6 w-6 text-primary" />
+          </div>
+          <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
+            Newsletter QA Tool
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </header>
+
+      <main className="flex-1 container mx-auto px-4 py-6 grid lg:grid-cols-2 gap-6 h-[calc(100vh-64px)]">
+        {/* Left Column: Input */}
+        <section className="flex flex-col gap-4 min-h-[500px]">
+          <Card className="flex-1 flex flex-col shadow-md">
+            <CardHeader className="py-4 border-b bg-muted/20">
+              <CardTitle className="text-sm font-medium flex justify-between items-center">
+                <span>Source Code</span>
+                <div className="text-xs text-muted-foreground font-normal">
+                  {htmlInput.length} chars
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 p-0 relative">
+              <Textarea
+                className="w-full h-full min-h-[400px] border-0 rounded-none resize-none font-mono text-sm p-4 focus-visible:ring-0"
+                value={htmlInput}
+                onChange={(e) => setHtmlInput(e.target.value)}
+                placeholder="Paste your HTML here..."
+              />
+              <div className="absolute bottom-4 right-4 animate-in fade-in zoom-in duration-300">
+                <Button
+                  size="lg"
+                  onClick={handleAnalyze}
+                  disabled={isAnalyzing}
+                  className="shadow-lg hover:shadow-xl transition-all"
+                >
+                  {isAnalyzing ? "Analyzing..." : "Analyze HTML"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Right Column: Dashboard */}
+        <section className="flex flex-col min-h-[500px] overflow-hidden">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+            <div className="flex items-center justify-between mb-2">
+              <TabsList>
+                <TabsTrigger value="report">Analysis Report</TabsTrigger>
+                <TabsTrigger value="preview">Preview Simulation</TabsTrigger>
+              </TabsList>
+            </div>
+
+            <div className="flex-1 overflow-auto">
+              <TabsContent value="report" className="h-full mt-0">
+                <AnalysisReport result={result} isAnalyzing={isAnalyzing} />
+              </TabsContent>
+              <TabsContent value="preview" className="h-full mt-0">
+                <PreviewPanel htmlContent={htmlInput} />
+              </TabsContent>
+            </div>
+          </Tabs>
+        </section>
       </main>
     </div>
-  );
+  )
 }
